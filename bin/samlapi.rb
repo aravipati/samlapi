@@ -8,7 +8,7 @@ require 'base64'
 require 'highline'
 require 'json'
 
-BASE_URL = 'https://shibidp.cit.cornell.edu/idp/profile/SAML2/Unsolicited/SSO?providerId=urn:amazon:webservices'.freeze
+BASE_URL = 'https://idp.iu.edu/shibboleth-idp/profile/SAML2/Unsolicited/SSO?providerId=urn:amazon:webservices'.freeze
 AWS_ROLE = 'https://aws.amazon.com/SAML/Attributes/Role'.freeze
 AWS_CONFIG_FILE = '/.aws/credentials'.freeze
 REGION = 'us-east-1'.freeze
@@ -17,7 +17,7 @@ OUTPUT_FORMAT = 'json'.freeze
 cli = HighLine.new
 
 # Get the federated credentials from the user
-print 'netid: '
+print 'username: '
 netid = STDIN.gets.chomp
 password = cli.ask('Enter your password:  ') { |q| q.echo = '*' }
 print ''
@@ -25,10 +25,10 @@ print ''
 driver = Selenium::WebDriver.for :firefox
 driver.navigate.to BASE_URL
 
-wait = Selenium::WebDriver::Wait.new(timeout: 30) # seconds
-wait.until { driver.find_element(id: 'netid') }
+wait = Selenium::WebDriver::Wait.new(timeout: 60) # seconds
+wait.until { driver.find_element(id: 'username') }
 
-element = driver.find_element(:id, 'netid')
+element = driver.find_element(:id, 'username')
 element.send_keys netid
 element = driver.find_element(:id, 'password')
 element.send_keys password
